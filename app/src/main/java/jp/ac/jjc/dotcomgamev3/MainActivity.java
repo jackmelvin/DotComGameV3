@@ -62,11 +62,6 @@ public class MainActivity extends AppCompatActivity {
         tvKilled.setText(killedMsg);
         tvLeft.setText(leftMsg);
     }
-    // ボタンの文字を買えるメソッド
-//    public void View_setText(View view, String text) {
-//        Button btn = (Button) view;
-//        btn.setText(text);
-//    }
 
     private class Listener implements View.OnClickListener {
         String location;
