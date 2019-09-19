@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">DotComGameV3</string>
+    <string name="nonClicked">❓</string>
+    <string name="hit">◯️</string>
+    <string name="miss"></string>
+    <string name="stt_hit">Hit</string>
+    <string name="stt_miss">Miss</string>
+    <string name="stt_kill">Kill</string>
+    <string name="endGame_Front">You won with\u0020</string>
+    <string name="endGame_End">\u0020guesses</string>
+    <string name="tv_attempt">Current attempt(s):\u0020</string>
+    <string name="tv_dotComKilled">DotCom(s) killed:\u0020</string>
+    <string name="tv_dotComLeft">DotCom(s) to go:\u0020</string>
+</resources>
