@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,17 +22,21 @@ public class MainActivity extends AppCompatActivity {
         HORIZONTAL,
         VERTICAL
     }
+    enum Player {
+        USER,
+        PC
+    }
     TextView tvStatus;
     final int DOTCOMLENGTH = 3;
     final int GRIDSIZE = 49;
     final int GRIDWIDTH = 7;
     final int NUMOFDOTCOM = 3;
     boolean[] grid;
-    ArrayList<DotCom> dotComList;
+    ArrayList<DotCom> pcDotComList;
     DotComGame game;
     Button[] cells;
-    int color[] = {Color.RED, Color.GREEN, Color.BLUE};
-    int currentColor = 0;
+//    int color[] = {Color.BLUE, Color.GREEN, Color.BLUE};
+//    int currentColor = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,22 +50,18 @@ public class MainActivity extends AppCompatActivity {
         }
         tvStatus = findViewById(R.id.tvStatus);
         grid = new boolean[GRIDSIZE];
-        dotComList = new ArrayList<DotCom>();
+        pcDotComList = new ArrayList<DotCom>();
         game = new DotComGame();
         game.setUpGame();
-
     }
 
     public void setMessage() {
-        TextView tvAttempt = findViewById(R.id.tvAttempt);
-        TextView tvKilled = findViewById(R.id.tvKilled);
-        TextView tvLeft = findViewById(R.id.tvLeft);
-        String attemptMsg = getString(R.string.tv_attempt) + Integer.toString(game.numOfGuesses);
-        String leftMsg = getString(R.string.tv_dotComLeft) + Integer.toString(dotComList.size());
-        String killedMsg = getString(R.string.tv_dotComKilled) + Integer.toString(NUMOFDOTCOM - dotComList.size());
-        tvAttempt.setText(attemptMsg);
-        tvKilled.setText(killedMsg);
-        tvLeft.setText(leftMsg);
+        TextView tvUserMove = findViewById(R.id.tvUserMove);
+        TextView tvPcMove = findViewById(R.id.tvPcMove);
+        String userMoveMsg = getString(R.string.tv_user_move) + Integer.toString(game.numOfGuesses);
+        String pcMoveMsg = getString(R.string.tv_pc_move) + Integer.toString(game.pcMoves);
+        tvUserMove.setText(userMoveMsg);
+        tvPcMove.setText(pcMoveMsg);
     }
 
     private class Listener implements View.OnClickListener {
@@ -71,11 +72,11 @@ public class MainActivity extends AppCompatActivity {
         Result result;// = Result.MISS;
         public void onClick(View view) {
             game.numOfGuesses++;
-
-            for(DotCom dotCom: dotComList) {
-                result = dotCom.checkYourself(location);
+            grid[Integer.parseInt(location)] = true;
+            for(DotCom dotCom: pcDotComList) {
+                result = dotCom.checkYourself(location, Player.USER);
                 if(result == Result.KILL) {
-                    dotComList.remove(dotCom);
+                    pcDotComList.remove(dotCom);
                     break;
                 }
                 if(result == Result.HIT) {
@@ -84,61 +85,161 @@ public class MainActivity extends AppCompatActivity {
             }
             Button btn = (Button) view;
             if(result == Result.MISS) {
+                btn.setTextColor(Color.BLUE);
                 btn.setText(getString(R.string.miss));
+                game.pcAttack();
             } else {
+                btn.setBackgroundColor(Color.RED);
+                btn.setTextColor(Color.BLUE);
                 btn.setText(getString(R.string.hit));
             }
             setMessage();
-            String message;
-            if(dotComList.isEmpty()) {
-                message = getString(R.string.endGame_Front) + game.numOfGuesses + getString(R.string.endGame_End);
-                tvStatus.setText(message);
-                for(Button cell : cells) {
-                    cell.setOnClickListener(null);
-                }
+            if(pcDotComList.isEmpty()) {
+                game.endGame(Player.USER);
             }
             view.setOnClickListener(null);
         }
     }
 
     private class DotComGame {
+        ArrayList<DotCom> userDotComList = new ArrayList<DotCom>();
         private int numOfGuesses = 0;
+        private int pcMoves = 0;
         private void setUpGame() {
+            setUserDotComs();
+            setPcDotComs();
+            setMessage();
+        }
+        private void setPcDotComs() {
             GameHelper helper = new GameHelper();
             DotCom one = new DotCom();
             DotCom two = new DotCom();
             DotCom three = new DotCom();
-            dotComList.add(one);
-            dotComList.add(two);
-            dotComList.add(three);
-            for(DotCom dotComToSet : dotComList) {
-                dotComToSet.setLocations(helper.placeDotCom());
+            pcDotComList.add(one);
+            pcDotComList.add(two);
+            pcDotComList.add(three);
+            for(DotCom dotComToSet : pcDotComList) {
+                dotComToSet.setLocationCells(helper.placeDotCom());
             }
-            setMessage();
+            for(DotCom dot : userDotComList) {
+                for(int i = 0; i < DOTCOMLENGTH; i++) {
+                    int loc = Integer.parseInt(dot.getLocationCells().get(i));
+                    grid[loc] = false;
+                }
+            }
+        }
+        private void setUserDotComs() {
+            DotCom userDotComOne = new DotCom();
+            DotCom userDotComTwo = new DotCom();
+            DotCom userDotComThree = new DotCom();
+            //Default user location
+            ArrayList<String> loc1 = new ArrayList<String>(Arrays.asList("1", "2", "3"));
+            ArrayList<String> loc2 = new ArrayList<String>(Arrays.asList("0", "7", "14"));
+            ArrayList<String> loc3 = new ArrayList<String>(Arrays.asList("42", "43", "44"));
+            userDotComOne.setLocationCells(loc1);
+            userDotComTwo.setLocationCells(loc2);
+            userDotComThree.setLocationCells(loc3);
+
+            //
+            userDotComList.add(userDotComOne);
+            userDotComList.add(userDotComTwo);
+            userDotComList.add(userDotComThree);
+
+            for(DotCom dc : userDotComList) {
+                for(int i = 0; i < DOTCOMLENGTH; i++) {
+                    int loc = Integer.parseInt(dc.getLocationCells().get(i));
+                    System.out.println("User loc: " + loc);
+                    grid[loc] = true;
+                    cells[loc].setText(getString(R.string.user_alive));
+                    cells[loc].setOnClickListener(null);
+                }
+            }
+        }
+        private void pcAttack() {
+            pcMoves++;
+            String randNum = null;
+            boolean notDuplicated = false;
+            while(!notDuplicated) {
+                randNum = Integer.toString((int) (Math.random() * 49));
+                if(!grid[Integer.parseInt(randNum)]) {
+                    for (DotCom dot : pcDotComList) {
+                        Result result = dot.checkYourself(randNum, null);
+                        if (result == Result.HIT || result == Result.KILL) {
+                            notDuplicated = false;
+                            break;
+                        } else {
+                            notDuplicated = true;
+                        }
+                    }
+                }
+            }
+            System.out.println(randNum);
+            //Check PC attack
+            grid[Integer.parseInt(randNum)] = true;
+            cells[Integer.parseInt(randNum)].setOnClickListener(null);
+            Result result = null;
+            for(DotCom dotComToCheck : userDotComList) {
+                result = dotComToCheck.checkYourself(randNum, Player.PC);
+                if(result == Result.KILL) {
+                    userDotComList.remove(dotComToCheck);
+                    break;
+                }
+                if(result == Result.HIT) {
+                    break;
+                }
+            }
+            if(result == Result.HIT || result == Result.KILL) {
+                cells[Integer.parseInt(randNum)].setTextColor(Color.RED);
+                cells[Integer.parseInt(randNum)].setBackgroundColor(Color.BLUE);
+                cells[Integer.parseInt(randNum)].setText(getString(R.string.hit));
+                if(userDotComList.isEmpty()) {
+                    endGame(Player.PC);
+                } else {
+                    pcAttack();
+                }
+            } else {
+                cells[Integer.parseInt(randNum)].setTextColor(Color.RED);
+                cells[Integer.parseInt(randNum)].setText(getString(R.string.miss));
+            }
+            //End PC attack
+        }
+        private void endGame(Player who) {
+            String message = null;
+            if(who == Player.USER) {
+                message = getString(R.string.win);
+            } else if(who == Player.PC){
+                message = getString(R.string.lose);
+            }
+            tvStatus.setText(message);
+            for(Button cell : cells) {
+                cell.setOnClickListener(null);
+            }
         }
     }
 
     private class DotCom {
         private ArrayList<String> locationCells;
-        public void setLocations(ArrayList<String> loc) {
+        public void setLocationCells(ArrayList<String> loc) {
             this.locationCells = loc;
         }
-
-        public Result checkYourself(String userGuess) {
+        public ArrayList<String> getLocationCells() {
+            return locationCells;
+        }
+        public Result checkYourself(String userGuess, Player who) {
             String status;
             Result result;
             int index = locationCells.indexOf(userGuess);
             if(index >= 0) {
                 locationCells.remove(index);
                 result = Result.HIT;
-                status = getString(R.string.stt_hit);
+                status = who + getString(R.string.stt_hit);
             } else {
                 result = Result.MISS;
-                status = getString(R.string.stt_miss);
+                status = who + getString(R.string.stt_miss);
             }
             if(locationCells.isEmpty()) {
                 result = Result.KILL;
-                status = getString(R.string.stt_kill);
+                status = who + getString(R.string.stt_kill);
             }
             tvStatus.setText(status);
             return result;
@@ -184,11 +285,12 @@ public class MainActivity extends AppCompatActivity {
             dotComCount++;
             ArrayList<String> locationCells = new ArrayList<String>();
             for(int i = 0; i < DOTCOMLENGTH; i++) {
-                cells[coords[i]].setTextColor(color[currentColor]);
+                //cells[coords[i]].setTextColor(color[currentColor]);
+                //cells[coords[i]].setTextColor(Color.RED);
                 grid[coords[i]] = true;
                 locationCells.add(Integer.toString(coords[i]));
             }
-            currentColor++;
+            //currentColor++;
             return locationCells;
         }
     }

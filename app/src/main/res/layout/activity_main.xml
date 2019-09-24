@@ -452,19 +452,13 @@
         android:text=""
         android:textSize="24dp"/>
     <TextView
-        android:id="@+id/tvAttempt"
+        android:id="@+id/tvUserMove"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""
         android:textSize="24dp"/>
     <TextView
-        android:id="@+id/tvKilled"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="24dp"/>
-    <TextView
-        android:id="@+id/tvLeft"
+        android:id="@+id/tvPcMove"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""

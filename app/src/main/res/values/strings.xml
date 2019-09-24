@@ -1,14 +1,23 @@
 <resources>
     <string name="app_name">DotComGameV3</string>
-    <string name="nonClicked">❓</string>
-    <string name="hit">◯️</string>
-    <string name="miss"></string>
-    <string name="stt_hit">Hit</string>
-    <string name="stt_miss">Miss</string>
-    <string name="stt_kill">Kill</string>
-    <string name="endGame_Front">You won with\u0020</string>
-    <string name="endGame_End">\u0020guesses</string>
-    <string name="tv_attempt">Current attempt(s):\u0020</string>
-    <string name="tv_dotComKilled">DotCom(s) killed:\u0020</string>
-    <string name="tv_dotComLeft">DotCom(s) to go:\u0020</string>
+    <string name="nonClicked"></string>
+    <string name="hit">◎</string>
+    <string name="miss">×</string>
+    <string name="stt_hit">\u0020got a Hit</string>
+    <string name="stt_miss">\u0020got a Miss</string>
+    <string name="stt_kill">\u0020got a Kill</string>
+    <string name="tv_user_move">🔵Your move:\u0020</string>
+    <string name="tv_pc_move">🔴PC\'s move:\u0020</string>
+    <string name="bt_start">Start Game</string>
+    <string name="bt_howToPlay">How to play</string>
+    <string name="bt_exit">Exit</string>
+    <string name="user_alive">🔵️</string>
+    <string name="user_hit">❎</string>
+    <string name="win">You won! Congratulations!</string>
+    <string name="lose">You lost!</string>
+    <string name="how_to_play">・You and PC have 3 ships each other.\n
+        ・Each ship is a 3-adjacent-dots placed horizontally and vertically.\n
+        ・Your ships and moves is marked with Blue color while PC\'s are marked with Red.\n
+        ・You need to sink all enemy\'s ships before PC sinks yours.</string>
+    <string name="bt_main_menu">Main menu</string>
 </resources>
