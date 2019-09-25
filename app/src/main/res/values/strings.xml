@@ -7,7 +7,7 @@
     <string name="stt_miss">\u0020got a Miss</string>
     <string name="stt_kill">\u0020got a Kill</string>
     <string name="tv_user_move">🔵Your move:\u0020</string>
-    <string name="tv_pc_move">🔴PC\'s move:\u0020</string>
+    <string name="tv_com_move">🔴Com\'s move:\u0020</string>
     <string name="bt_start">Start Game</string>
     <string name="bt_howToPlay">How to play</string>
     <string name="bt_exit">Exit</string>
@@ -15,9 +15,11 @@
     <string name="user_hit">❎</string>
     <string name="win">You won! Congratulations!</string>
     <string name="lose">You lost!</string>
-    <string name="how_to_play">・You and PC have 3 ships each other.\n
+    <string name="how_to_play">・You and Computer have 3 ships each other.\n
         ・Each ship is a 3-adjacent-dots placed horizontally and vertically.\n
-        ・Your ships and moves is marked with Blue color while PC\'s are marked with Red.\n
-        ・You need to sink all enemy\'s ships before PC sinks yours.</string>
+        ・Your ships and moves is marked with Blue color while Computer\'s are marked with Red.\n
+        ・If you make a hit or a kill, you can try one more time, so does Computer.
+        ・If you or Computer make a miss, next turn is enemy\'s.
+        ・You need to sink all enemy\'s ships before Computer sinks yours.</string>
     <string name="bt_main_menu">Main menu</string>
 </resources>

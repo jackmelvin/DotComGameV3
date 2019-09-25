@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         TextView tvUserMove = findViewById(R.id.tvUserMove);
         TextView tvPcMove = findViewById(R.id.tvPcMove);
         String userMoveMsg = getString(R.string.tv_user_move) + Integer.toString(game.numOfGuesses);
-        String pcMoveMsg = getString(R.string.tv_pc_move) + Integer.toString(game.pcMoves);
+        String pcMoveMsg = getString(R.string.tv_com_move) + Integer.toString(game.pcMoves);
         tvUserMove.setText(userMoveMsg);
         tvPcMove.setText(pcMoveMsg);
     }
